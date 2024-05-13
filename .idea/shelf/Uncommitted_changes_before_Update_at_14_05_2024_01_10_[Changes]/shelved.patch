@@ -1,0 +1,467 @@
+Index: src/AutomatedTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import org.junit.jupiter.api.AfterAll;\r\nimport org.junit.jupiter.api.BeforeAll;\r\nimport org.openqa.selenium.By;\r\nimport org.openqa.selenium.WebDriver;\r\nimport org.openqa.selenium.chrome.ChromeDriver;\r\nimport org.openqa.selenium.chrome.ChromeOptions;\r\n\r\npublic class AutomatedTest {\r\n    protected static WebDriver driver;\r\n    protected static final String username = \"seleniumtestuser@mailinator.com\";\r\n    protected static final String password = \"test98125!\";\r\n\r\n    protected static final String baseURL = \"zamaninda.com\";\r\n\r\n    protected static SeleniumApsUtil seleniumApsUtil;\r\n\r\n    @BeforeAll\r\n    public static void setUp() {\r\n        ChromeOptions options = new ChromeOptions();\r\n        options.addArguments(\"--whitelisted-ips=''\");\r\n        options.addArguments(\"--remote-allow-origins=*\");\r\n        driver = new ChromeDriver(options);\r\n        seleniumApsUtil = new SeleniumApsUtil(driver);\r\n        driver.get(String.format(\"https://%s/login\", baseURL));\r\n        //important, otherwise elements might not be in the viewport, and you might get \"element click intercepted\" errors\r\n        driver.manage().window().maximize();\r\n        seleniumApsUtil.clearAndEnterText(\"email\", username);\r\n        seleniumApsUtil.clearAndEnterText(\"password\", password);\r\n        driver.findElement(By.id(\"loginButton\")).click();\r\n    }\r\n\r\n    @AfterAll\r\n    public static void tearDown() {\r\n        driver.quit();\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/AutomatedTest.java b/src/AutomatedTest.java
+--- a/src/AutomatedTest.java	(revision 9e53ba207f8b41987cc412a2fa828e434d9a99ab)
++++ b/src/AutomatedTest.java	(date 1715637736504)
+@@ -1,7 +1,9 @@
+ import org.junit.jupiter.api.AfterAll;
+ import org.junit.jupiter.api.BeforeAll;
+ import org.openqa.selenium.By;
++import org.openqa.selenium.NoSuchElementException;
+ import org.openqa.selenium.WebDriver;
++import org.openqa.selenium.WebElement;
+ import org.openqa.selenium.chrome.ChromeDriver;
+ import org.openqa.selenium.chrome.ChromeOptions;
+ 
+@@ -10,7 +12,7 @@
+     protected static final String username = "seleniumtestuser@mailinator.com";
+     protected static final String password = "test98125!";
+ 
+-    protected static final String baseURL = "zamaninda.com";
++    protected static final String baseURL = "arsiv.mackolik.com/Default.aspx";
+ 
+     protected static SeleniumApsUtil seleniumApsUtil;
+ 
+@@ -21,12 +23,18 @@
+         options.addArguments("--remote-allow-origins=*");
+         driver = new ChromeDriver(options);
+         seleniumApsUtil = new SeleniumApsUtil(driver);
+-        driver.get(String.format("https://%s/login", baseURL));
+-        //important, otherwise elements might not be in the viewport, and you might get "element click intercepted" errors
+-        driver.manage().window().maximize();
+-        seleniumApsUtil.clearAndEnterText("email", username);
+-        seleniumApsUtil.clearAndEnterText("password", password);
+-        driver.findElement(By.id("loginButton")).click();
++        try {
++            // Reklam geç butonuna tıkla (örneğin, id'si "skip-ad" olan bir öğe varsayalım)
++            WebElement skipAdButton = driver.findElement(By.id("percent"));
++            if(skipAdButton != null) {
++                skipAdButton.click();
++                System.out.println("Reklam geçildi.");
++            } else {
++                System.out.println("Reklam geç butonu bulunamadı.");
++            }
++        } catch (NoSuchElementException e) {
++            System.out.println("Reklam geç butonu bulunamadı.");
++        }
+     }
+ 
+     @AfterAll
+Index: src/SeleniumApsUtil.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package PACKAGE_NAME;public class SeleniumApsUtil {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/SeleniumApsUtil.java b/src/SeleniumApsUtil.java
+--- a/src/SeleniumApsUtil.java	(revision 9e53ba207f8b41987cc412a2fa828e434d9a99ab)
++++ b/src/SeleniumApsUtil.java	(date 1715637648734)
+@@ -1,2 +1,225 @@
+-package PACKAGE_NAME;public class SeleniumApsUtil {
+-}
++import org.openqa.selenium.By;
++import org.openqa.selenium.NoSuchElementException;
++import org.openqa.selenium.WebDriver;
++import org.openqa.selenium.WebElement;
++import org.openqa.selenium.support.ui.ExpectedConditions;
++import org.openqa.selenium.support.ui.WebDriverWait;
++
++import java.time.Duration;
++import java.util.function.Function;
++
++public class SeleniumApsUtil {
++    final int SPINNER_WAIT_TIME_S = 10;
++    final int JS_LOAD_TIME_MS = 500;
++    protected WebDriver driver;
++
++    SeleniumApsUtil(WebDriver driver) {
++        this.driver = driver;
++    }
++
++    String getSelectedChildPillXPath() {
++        return "//div[@class='tab-pane fade active show']//div[@id='pills-tabContent']//div[@class='tab-pane fade active show']";
++    }
++
++    void waitForJSLoad() {
++        try {
++            Thread.sleep(JS_LOAD_TIME_MS);
++        } catch (InterruptedException e) {
++            throw new RuntimeException(e);
++        }
++    }
++
++    void waitForSpinnerToDisappear() {
++        var wait = new WebDriverWait(driver, Duration.ZERO.plusSeconds(SPINNER_WAIT_TIME_S));
++        Function<WebDriver, Boolean> spinnerNotDisplayed = driver -> !driver.findElement(By.id("spinnerModal")).isDisplayed();
++        wait.until(spinnerNotDisplayed);
++    }
++
++    boolean elementExists(By by, WebDriver driver) {
++        try {
++            driver.findElement(by);
++            return true;
++        } catch (NoSuchElementException e) {
++            return false;
++        }
++    }
++
++    boolean elementExists(By by) {
++        return elementExists(by, driver);
++    }
++
++    boolean elementExists(String elementID, WebDriver driver) {
++        return elementExists(By.id(elementID), driver);
++    }
++
++    boolean elementExists(String elementID) {
++        return elementExists(elementID, driver);
++    }
++
++    void waitUntilExistent(String elementID, int wait_s) {
++        var wait = new WebDriverWait(driver, Duration.ZERO.plusSeconds(wait_s));
++        Function<WebDriver, Boolean> reserveButtonExistent = driver -> elementExists(elementID);
++        wait.until(reserveButtonExistent);
++    }
++    public void goToStatisticsDetails() {
++        driver.findElement(By.id("bottom-menu0")).click();
++        driver.findElement(By.xpath("//*[@id=\"bottom-menu0\"]/a[5]")).click();
++    }
++    public void goToStatisticsList() {
++        goToStatisticsDetails();
++        driver.findElement(By.linkText("İstatistikler")).click();
++        waitForJSLoad();
++    }
++
++
++    public void goToFirstLocationDetails() {
++        driver.findElement(By.id("sidebar_item_locations")).click();
++        driver.findElement(By.xpath("((//table[1]/tbody/tr)[1])//td[2]//a")).click();
++    }
++
++    public void goToWorkstationsList() {
++        goToFirstLocationDetails();
++        driver.findElement(By.id("stations-tab")).click();
++        waitForJSLoad();
++    }
++
++    public void clearAndEnterText(String textBoxID, String content) {
++        var element = driver.findElement(By.id(textBoxID));
++        element.clear();
++        element.sendKeys(content);
++    }
++
++    public void goToTab(String tabDivID, String workstationName) {
++        driver.findElement(By.id(tabDivID + "-tab")).click();
++        waitForJSLoad();
++        selectWorkstationTab(tabDivID, workstationName);
++    }
++
++    public boolean alertDangerErrorPresent() {
++        return elementExists(By.xpath("//div[contains(@class, 'alert-danger')]"));
++    }
++
++    public void clickOnBreadcrumb() {
++        driver.findElement(By.xpath("//li[contains(@class, 'breadcrumb-item')]/a")).click();
++    }
++
++    public boolean addMondayShiftToCurrentWorkstation(String from, String to) {
++        driver.findElement(By.xpath(getSelectedChildPillXPath() + "//div[@class='addStationIcon'][1]/parent::div")).click();
++        if (!from.isEmpty() && !to.isEmpty()) {
++            clearAndEnterText("from", from);
++            clearAndEnterText("to", to);
++        }
++
++        driver.findElement(By.id("addWorkingTimeSubmitButton")).click();
++        boolean failed = alertDangerErrorPresent();
++        if (failed) {
++            clickOnBreadcrumb();
++        }
++        waitForJSLoad();
++        return !failed;
++    }
++
++    public void addMondayShiftToCurrentWorkstation() {
++        addMondayShiftToCurrentWorkstation("", "");
++    }
++
++    public void deleteFirstMondayShiftOfCurrentWorkstation() {
++        driver.findElement(By.xpath(getSelectedChildPillXPath() + "//div[@class='workingHours'][1]")).click();
++        driver.findElement(By.id("workingtime_delete_button")).click();
++        waitForJSLoad();
++    }
++
++    public void deleteFirstWorkingExceptionOfCurrentWorkstation() {
++        deleteViaThreeDots(getSelectedChildPillXPath() + "//tr[1]//td[last()]");
++    }
++
++    public boolean addWorkingExceptionToCurrentWorkstation(String date) {
++        driver.findElement(By.xpath(getSelectedChildPillXPath() + "//a[contains(@class, 'btn')][1]")).click();
++        driver.findElement(By.id("closed")).click(); //select closed
++        clearAndEnterText("dateInput", date);
++        driver.findElement(By.id("addButton")).click();
++        boolean failed = alertDangerErrorPresent();
++        if (failed) {
++            clickOnBreadcrumb();
++        }
++        waitForJSLoad();
++        return !failed;
++    }
++
++    void selectWorkstationTab(String tabDivID, String workstationName) {
++        driver.findElement(By.xpath(String.format("//div[@id='%s']", tabDivID) + String.format("//a[contains(text(), '%s')]/parent::li", workstationName))).click();
++        waitForJSLoad();
++    }
++
++    public void addWorkstation(String name) {
++        goToWorkstationsList();
++        driver.findElement(By.id("addWorkstationButton")).click();
++        clearAndEnterText("name", name);
++        driver.findElement(By.id("addWorkstationSubmitButton")).click();
++        waitForJSLoad();
++    }
++
++    public void assignWorkstationToFirstService(String workstationName) {
++        driver.findElement(By.id("services-tab")).click();
++        waitForJSLoad();
++        selectWorkstationTab("services", workstationName);
++        driver.findElement(By.xpath(getSelectedChildPillXPath() + "//a[contains(@class, 'btn')]")).click();
++        driver.findElement(By.xpath("//input[@class='form-check-input'][1]")).click();
++        driver.findElement(By.id("saveButton")).click();
++    }
++
++    void deleteViaThreeDots(String lastTDXpath) {
++        driver.findElement(By.xpath(lastTDXpath + "//a")).click();
++        driver.findElement(By.xpath(lastTDXpath + "//div[@class='dropdown-menu show']//a[last()]")).click();
++        waitForJSLoad();
++    }
++
++    void deleteViaThreeDotsByText(String text) {
++        deleteViaThreeDots(String.format("//td[contains(text(), '%s')]/parent::tr//td[last()]", text));
++    }
++
++    void deleteWorkstation(String workstationName) {
++        goToWorkstationsList();
++        deleteViaThreeDotsByText(workstationName);
++    }
++
++    //Returns true if the appointment was successfully reserved, false otherwise
++    boolean reserveAppointment(String workstationName, String time, String name, String surname) {
++        driver.findElement(By.id("sidebar_item_selfBooking")).click();
++        //pick first category
++        driver.findElement(By.xpath("//div[contains(@class, 'clickable-card')][1]")).click();
++        //pick first service
++        driver.findElement(By.xpath("//div[contains(@class, 'clickable-card')][1]")).click();
++        driver.findElement(By.id("i_understand_button")).click();
++        //pick last workstation
++        driver.findElement(By.xpath(String.format("//div[contains(text(), '%s')]/ancestor::div[contains(@class, 'clickable-card')]", workstationName))).click();
++
++        waitForSpinnerToDisappear();
++        try {
++            driver.findElement(By.xpath("//div[contains(@class, 'clickable-card')][last()]")).click();
++            waitForSpinnerToDisappear();
++        } catch (org.openqa.selenium.ElementClickInterceptedException e) {
++            System.out.println("The available times api fetch took longer than " + SPINNER_WAIT_TIME_S + " seconds (elements intractable)");
++            throw e;
++        }
++        driver.findElement(By.xpath(String.format("//button[contains(text(), '%s')]", time))).click();
++        waitUntilExistent("reserveButton", 10);
++        driver.findElement(By.id("reserveButton")).click();
++        driver.findElement(By.id("person_1_name")).sendKeys(name);
++        driver.findElement(By.id("person_1_surname")).sendKeys(surname);
++        driver.findElement(By.id("completeReservationButton")).click();
++        try {
++            waitUntilExistent("check_icon_div", 10);
++        } catch (org.openqa.selenium.TimeoutException e) {
++            return false;
++        }
++
++        return true;
++    }
++
++    public void deleteUser(String email) {
++        deleteViaThreeDotsByText(email);
++        waitForJSLoad();
++        driver.findElement(By.xpath("//button[@class='swal2-confirm swal2-styled']")).click();
++    }
++}
+\ No newline at end of file
+Index: src/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>public class Main {\r\n    public static void main(String[] args) {\r\n        System.out.println(\"Hello world!\");\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Main.java b/src/Main.java
+--- a/src/Main.java	(revision 9e53ba207f8b41987cc412a2fa828e434d9a99ab)
++++ b/src/Main.java	(date 1715637648719)
+@@ -1,5 +1,24 @@
++import org.openqa.selenium.WebDriver;
++
++import java.io.IOException;
++
+ public class Main {
+     public static void main(String[] args) {
+-        System.out.println("Hello world!");
++        // Test sınıfınızı oluşturun
++        AutomatedTest automatedTest = new AutomatedTest();
++        SeleniumApsUtil sel = new SeleniumApsUtil(AutomatedTest.driver);
++
++        // Test senaryosunu başlatmak için setUp() metodunu çağırın
++        automatedTest.setUp();
++
++        // Test senaryosunu çalıştırın
++        try {
++            sel.goToStatisticsList();
++        } catch (Exception e) {
++            e.printStackTrace();
++        } finally {
++            // Test senaryosunu sonlandırmak için tearDown() metodunu çağırın
++            automatedTest.tearDown();
++        }
+     }
+-}
+\ No newline at end of file
++}
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"f5a71fbd-81b7-445b-8630-78d3fab0a56d\" name=\"Changes\" comment=\"\">\r\n      <change afterPath=\"$PROJECT_DIR$/.gitignore\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/.idea/misc.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/.idea/modules.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/.idea/pom.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/.idea/vcs.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/MackolikTesting.iml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/CHANGELOG\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/LICENSE\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/NOTICE\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/auto-service-annotations-1.1.1-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/auto-service-annotations-1.1.1.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/byte-buddy-1.14.14-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/byte-buddy-1.14.14.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/checker-qual-3.42.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/checker-qual-3.42.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/commons-exec-1.4.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/commons-exec-1.4.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/error_prone_annotations-2.26.1-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/error_prone_annotations-2.26.1.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/failsafe-3.3.2-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/failsafe-3.3.2.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/failureaccess-1.0.2-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/failureaccess-1.0.2.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/guava-33.1.0-jre-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/guava-33.1.0-jre.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/j2objc-annotations-3.0.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/j2objc-annotations-3.0.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/jsr305-3.0.2-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/jsr305-3.0.2.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-api-1.37.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-api-1.37.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-api-incubator-1.37.0-alpha-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-api-incubator-1.37.0-alpha.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-context-1.37.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-context-1.37.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-exporter-logging-1.37.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-exporter-logging-1.37.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-sdk-1.37.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-sdk-1.37.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-sdk-common-1.37.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-sdk-common-1.37.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-sdk-extension-autoconfigure-1.37.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-sdk-extension-autoconfigure-1.37.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-sdk-extension-autoconfigure-spi-1.37.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-sdk-extension-autoconfigure-spi-1.37.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-sdk-logs-1.37.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-sdk-logs-1.37.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-sdk-metrics-1.37.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-sdk-metrics-1.37.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-sdk-trace-1.37.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-sdk-trace-1.37.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-semconv-1.25.0-alpha-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/opentelemetry-semconv-1.25.0-alpha.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-api-4.20.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-api-4.20.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-chrome-driver-4.20.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-chrome-driver-4.20.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-chromium-driver-4.20.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-chromium-driver-4.20.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-devtools-v122-4.20.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-devtools-v122-4.20.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-devtools-v123-4.20.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-devtools-v123-4.20.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-devtools-v124-4.20.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-devtools-v124-4.20.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-devtools-v85-4.20.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-devtools-v85-4.20.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-edge-driver-4.20.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-edge-driver-4.20.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-firefox-driver-4.20.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-firefox-driver-4.20.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-http-4.20.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-http-4.20.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-ie-driver-4.20.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-ie-driver-4.20.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-java-4.20.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-java-4.20.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-json-4.20.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-json-4.20.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-manager-4.20.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-manager-4.20.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-os-4.20.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-os-4.20.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-remote-driver-4.20.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-remote-driver-4.20.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-safari-driver-4.20.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-safari-driver-4.20.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-support-4.20.0-sources.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/lib/selenium-support-4.20.0.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/AutomatedTest.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/Main.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"2gQayTMDQswlK8RyGTlnzlRpGYU\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,\r\n    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,\r\n    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,\r\n    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,\r\n    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,\r\n    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,\r\n    &quot;last_opened_file_path&quot;: &quot;C:/Coding/MackolikTesting/lib&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,\r\n    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,\r\n    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Coding\\MackolikTesting\\lib\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"f5a71fbd-81b7-445b-8630-78d3fab0a56d\" name=\"Changes\" comment=\"\" />\r\n      <created>1715632511733</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1715632511733</updated>\r\n      <workItem from=\"1715632512933\" duration=\"1286000\" />\r\n      <workItem from=\"1715633816495\" duration=\"353000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 9e53ba207f8b41987cc412a2fa828e434d9a99ab)
++++ b/.idea/workspace.xml	(date 1715638209257)
+@@ -5,99 +5,11 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="f5a71fbd-81b7-445b-8630-78d3fab0a56d" name="Changes" comment="">
+-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/.idea/pom.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/MackolikTesting.iml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/CHANGELOG" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/LICENSE" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/NOTICE" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/auto-service-annotations-1.1.1-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/auto-service-annotations-1.1.1.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/byte-buddy-1.14.14-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/byte-buddy-1.14.14.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/checker-qual-3.42.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/checker-qual-3.42.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/commons-exec-1.4.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/commons-exec-1.4.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/error_prone_annotations-2.26.1-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/error_prone_annotations-2.26.1.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/failsafe-3.3.2-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/failsafe-3.3.2.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/failureaccess-1.0.2-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/failureaccess-1.0.2.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/guava-33.1.0-jre-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/guava-33.1.0-jre.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/j2objc-annotations-3.0.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/j2objc-annotations-3.0.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/jsr305-3.0.2-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/jsr305-3.0.2.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-api-1.37.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-api-1.37.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-api-incubator-1.37.0-alpha-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-api-incubator-1.37.0-alpha.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-context-1.37.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-context-1.37.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-exporter-logging-1.37.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-exporter-logging-1.37.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-1.37.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-1.37.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-common-1.37.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-common-1.37.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-extension-autoconfigure-1.37.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-extension-autoconfigure-1.37.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-extension-autoconfigure-spi-1.37.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-extension-autoconfigure-spi-1.37.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-logs-1.37.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-logs-1.37.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-metrics-1.37.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-metrics-1.37.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-trace-1.37.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-trace-1.37.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-semconv-1.25.0-alpha-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-semconv-1.25.0-alpha.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-api-4.20.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-api-4.20.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-chrome-driver-4.20.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-chrome-driver-4.20.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-chromium-driver-4.20.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-chromium-driver-4.20.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-devtools-v122-4.20.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-devtools-v122-4.20.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-devtools-v123-4.20.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-devtools-v123-4.20.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-devtools-v124-4.20.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-devtools-v124-4.20.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-devtools-v85-4.20.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-devtools-v85-4.20.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-edge-driver-4.20.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-edge-driver-4.20.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-firefox-driver-4.20.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-firefox-driver-4.20.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-http-4.20.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-http-4.20.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-ie-driver-4.20.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-ie-driver-4.20.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-java-4.20.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-java-4.20.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-json-4.20.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-json-4.20.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-manager-4.20.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-manager-4.20.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-os-4.20.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-os-4.20.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-remote-driver-4.20.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-remote-driver-4.20.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-safari-driver-4.20.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-safari-driver-4.20.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-support-4.20.0-sources.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/lib/selenium-support-4.20.0.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/AutomatedTest.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/StatisticCountryControl.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/AutomatedTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/AutomatedTest.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/SeleniumApsUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SeleniumApsUtil.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -158,7 +70,7 @@
+       <option name="presentableId" value="Default" />
+       <updated>1715632511733</updated>
+       <workItem from="1715632512933" duration="1286000" />
+-      <workItem from="1715633816495" duration="353000" />
++      <workItem from="1715633816495" duration="4388000" />
+     </task>
+     <servers />
+   </component>
+Index: src/StatisticCountryControl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/StatisticCountryControl.java b/src/StatisticCountryControl.java
+new file mode 100644
+--- /dev/null	(date 1715636374314)
++++ b/src/StatisticCountryControl.java	(date 1715636374314)
+@@ -0,0 +1,2 @@
++public class StatisticCountryControl {
++}

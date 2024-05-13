@@ -1,60 +1,225 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+import java.util.function.Function;
 
 public class SeleniumApsUtil {
-    protected static WebDriver driver;
-    protected static final String username = "seleniumtestuser@mailinator.com";
-    protected static final String password = "test98125!";
+    final int SPINNER_WAIT_TIME_S = 10;
+    final int JS_LOAD_TIME_MS = 500;
+    protected WebDriver driver;
 
-    protected static final String baseURL = "http://user.mackolik.com/UserPages/destek.aspx";
+    SeleniumApsUtil(WebDriver driver) {
+        this.driver = driver;
+    }
 
-    protected static SeleniumApsUtil seleniumApsUtil;
+    String getSelectedChildPillXPath() {
+        return "//div[@class='tab-pane fade active show']//div[@id='pills-tabContent']//div[@class='tab-pane fade active show']";
+    }
 
-        public static void main(String[] args) {
-
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments("--whitelisted-ips=''");
-            options.addArguments("--remote-allow-origins=*");
-            driver = new ChromeDriver(options);
-            seleniumApsUtil = new SeleniumApsUtil();
-            driver.get(String.format("https://%s/login", baseURL));
-            //important, otherwise elements might not be in the viewport, and you might get "element click intercepted" errors
-            driver.manage().window().maximize();
-//        seleniumApsUtil.clearAndEnterText("email", username);
-//        seleniumApsUtil.clearAndEnterText("password", password);
-            driver.findElement(By.id("loginButton")).click();
-
-            System.setProperty("webdriver.chrome.driver", "<path/to/chromedriver>"); // Replace with your ChromeDriver path
-
-            // Set headless mode (optional, comment out if you want to see the browser)
-            ChromeOptions options1 = new ChromeOptions();
-            options.addArguments("--headless");
-
-            WebDriver driver = new ChromeDriver(options);
-
-            try {
-                String url = "http://user.mackolik.com/UserPages/destek.aspx";
-                driver.get(url);
-
-                // Check if the page title contains "Maçkolik" (can be adjusted based on expected content)
-                if (driver.getTitle().contains("Maçkolik")) {
-                    System.out.println("Link is working! Page title contains 'Maçkolik'");
-                } else {
-                    System.out.println("Link might not be working. Page title: " + driver.getTitle());
-                }
-            } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
-            } finally {
-                driver.quit();
-            }
+    void waitForJSLoad() {
+        try {
+            Thread.sleep(JS_LOAD_TIME_MS);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
+    void waitForSpinnerToDisappear() {
+        var wait = new WebDriverWait(driver, Duration.ZERO.plusSeconds(SPINNER_WAIT_TIME_S));
+        Function<WebDriver, Boolean> spinnerNotDisplayed = driver -> !driver.findElement(By.id("spinnerModal")).isDisplayed();
+        wait.until(spinnerNotDisplayed);
+    }
+
+    boolean elementExists(By by, WebDriver driver) {
+        try {
+            driver.findElement(by);
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
+
+    boolean elementExists(By by) {
+        return elementExists(by, driver);
+    }
+
+    boolean elementExists(String elementID, WebDriver driver) {
+        return elementExists(By.id(elementID), driver);
+    }
+
+    boolean elementExists(String elementID) {
+        return elementExists(elementID, driver);
+    }
+
+    void waitUntilExistent(String elementID, int wait_s) {
+        var wait = new WebDriverWait(driver, Duration.ZERO.plusSeconds(wait_s));
+        Function<WebDriver, Boolean> reserveButtonExistent = driver -> elementExists(elementID);
+        wait.until(reserveButtonExistent);
+    }
+    public void goToStatisticsDetails() {
+        driver.findElement(By.id("bottom-menu0")).click();
+        driver.findElement(By.xpath("//*[@id=\"bottom-menu0\"]/a[5]")).click();
+    }
+    public void goToStatisticsList() {
+        goToStatisticsDetails();
+        driver.findElement(By.linkText("İstatistikler")).click();
+        waitForJSLoad();
+    }
 
 
+    public void goToFirstLocationDetails() {
+        driver.findElement(By.id("sidebar_item_locations")).click();
+        driver.findElement(By.xpath("((//table[1]/tbody/tr)[1])//td[2]//a")).click();
+    }
+
+    public void goToWorkstationsList() {
+        goToFirstLocationDetails();
+        driver.findElement(By.id("stations-tab")).click();
+        waitForJSLoad();
+    }
+
+    public void clearAndEnterText(String textBoxID, String content) {
+        var element = driver.findElement(By.id(textBoxID));
+        element.clear();
+        element.sendKeys(content);
+    }
+
+    public void goToTab(String tabDivID, String workstationName) {
+        driver.findElement(By.id(tabDivID + "-tab")).click();
+        waitForJSLoad();
+        selectWorkstationTab(tabDivID, workstationName);
+    }
+
+    public boolean alertDangerErrorPresent() {
+        return elementExists(By.xpath("//div[contains(@class, 'alert-danger')]"));
+    }
+
+    public void clickOnBreadcrumb() {
+        driver.findElement(By.xpath("//li[contains(@class, 'breadcrumb-item')]/a")).click();
+    }
+
+    public boolean addMondayShiftToCurrentWorkstation(String from, String to) {
+        driver.findElement(By.xpath(getSelectedChildPillXPath() + "//div[@class='addStationIcon'][1]/parent::div")).click();
+        if (!from.isEmpty() && !to.isEmpty()) {
+            clearAndEnterText("from", from);
+            clearAndEnterText("to", to);
+        }
+
+        driver.findElement(By.id("addWorkingTimeSubmitButton")).click();
+        boolean failed = alertDangerErrorPresent();
+        if (failed) {
+            clickOnBreadcrumb();
+        }
+        waitForJSLoad();
+        return !failed;
+    }
+
+    public void addMondayShiftToCurrentWorkstation() {
+        addMondayShiftToCurrentWorkstation("", "");
+    }
+
+    public void deleteFirstMondayShiftOfCurrentWorkstation() {
+        driver.findElement(By.xpath(getSelectedChildPillXPath() + "//div[@class='workingHours'][1]")).click();
+        driver.findElement(By.id("workingtime_delete_button")).click();
+        waitForJSLoad();
+    }
+
+    public void deleteFirstWorkingExceptionOfCurrentWorkstation() {
+        deleteViaThreeDots(getSelectedChildPillXPath() + "//tr[1]//td[last()]");
+    }
+
+    public boolean addWorkingExceptionToCurrentWorkstation(String date) {
+        driver.findElement(By.xpath(getSelectedChildPillXPath() + "//a[contains(@class, 'btn')][1]")).click();
+        driver.findElement(By.id("closed")).click(); //select closed
+        clearAndEnterText("dateInput", date);
+        driver.findElement(By.id("addButton")).click();
+        boolean failed = alertDangerErrorPresent();
+        if (failed) {
+            clickOnBreadcrumb();
+        }
+        waitForJSLoad();
+        return !failed;
+    }
+
+    void selectWorkstationTab(String tabDivID, String workstationName) {
+        driver.findElement(By.xpath(String.format("//div[@id='%s']", tabDivID) + String.format("//a[contains(text(), '%s')]/parent::li", workstationName))).click();
+        waitForJSLoad();
+    }
+
+    public void addWorkstation(String name) {
+        goToWorkstationsList();
+        driver.findElement(By.id("addWorkstationButton")).click();
+        clearAndEnterText("name", name);
+        driver.findElement(By.id("addWorkstationSubmitButton")).click();
+        waitForJSLoad();
+    }
+
+    public void assignWorkstationToFirstService(String workstationName) {
+        driver.findElement(By.id("services-tab")).click();
+        waitForJSLoad();
+        selectWorkstationTab("services", workstationName);
+        driver.findElement(By.xpath(getSelectedChildPillXPath() + "//a[contains(@class, 'btn')]")).click();
+        driver.findElement(By.xpath("//input[@class='form-check-input'][1]")).click();
+        driver.findElement(By.id("saveButton")).click();
+    }
+
+    void deleteViaThreeDots(String lastTDXpath) {
+        driver.findElement(By.xpath(lastTDXpath + "//a")).click();
+        driver.findElement(By.xpath(lastTDXpath + "//div[@class='dropdown-menu show']//a[last()]")).click();
+        waitForJSLoad();
+    }
+
+    void deleteViaThreeDotsByText(String text) {
+        deleteViaThreeDots(String.format("//td[contains(text(), '%s')]/parent::tr//td[last()]", text));
+    }
+
+    void deleteWorkstation(String workstationName) {
+        goToWorkstationsList();
+        deleteViaThreeDotsByText(workstationName);
+    }
+
+    //Returns true if the appointment was successfully reserved, false otherwise
+    boolean reserveAppointment(String workstationName, String time, String name, String surname) {
+        driver.findElement(By.id("sidebar_item_selfBooking")).click();
+        //pick first category
+        driver.findElement(By.xpath("//div[contains(@class, 'clickable-card')][1]")).click();
+        //pick first service
+        driver.findElement(By.xpath("//div[contains(@class, 'clickable-card')][1]")).click();
+        driver.findElement(By.id("i_understand_button")).click();
+        //pick last workstation
+        driver.findElement(By.xpath(String.format("//div[contains(text(), '%s')]/ancestor::div[contains(@class, 'clickable-card')]", workstationName))).click();
+
+        waitForSpinnerToDisappear();
+        try {
+            driver.findElement(By.xpath("//div[contains(@class, 'clickable-card')][last()]")).click();
+            waitForSpinnerToDisappear();
+        } catch (org.openqa.selenium.ElementClickInterceptedException e) {
+            System.out.println("The available times api fetch took longer than " + SPINNER_WAIT_TIME_S + " seconds (elements intractable)");
+            throw e;
+        }
+        driver.findElement(By.xpath(String.format("//button[contains(text(), '%s')]", time))).click();
+        waitUntilExistent("reserveButton", 10);
+        driver.findElement(By.id("reserveButton")).click();
+        driver.findElement(By.id("person_1_name")).sendKeys(name);
+        driver.findElement(By.id("person_1_surname")).sendKeys(surname);
+        driver.findElement(By.id("completeReservationButton")).click();
+        try {
+            waitUntilExistent("check_icon_div", 10);
+        } catch (org.openqa.selenium.TimeoutException e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public void deleteUser(String email) {
+        deleteViaThreeDotsByText(email);
+        waitForJSLoad();
+        driver.findElement(By.xpath("//button[@class='swal2-confirm swal2-styled']")).click();
+    }
+}
