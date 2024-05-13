@@ -5,99 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f5a71fbd-81b7-445b-8630-78d3fab0a56d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MackolikTesting.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/CHANGELOG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/LICENSE" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/NOTICE" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/auto-service-annotations-1.1.1-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/auto-service-annotations-1.1.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/byte-buddy-1.14.14-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/byte-buddy-1.14.14.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/checker-qual-3.42.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/checker-qual-3.42.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/commons-exec-1.4.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/commons-exec-1.4.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/error_prone_annotations-2.26.1-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/error_prone_annotations-2.26.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/failsafe-3.3.2-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/failsafe-3.3.2.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/failureaccess-1.0.2-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/failureaccess-1.0.2.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/guava-33.1.0-jre-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/guava-33.1.0-jre.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/j2objc-annotations-3.0.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/j2objc-annotations-3.0.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/jsr305-3.0.2-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/jsr305-3.0.2.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-api-1.37.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-api-1.37.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-api-incubator-1.37.0-alpha-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-api-incubator-1.37.0-alpha.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-context-1.37.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-context-1.37.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-exporter-logging-1.37.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-exporter-logging-1.37.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-1.37.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-1.37.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-common-1.37.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-common-1.37.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-extension-autoconfigure-1.37.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-extension-autoconfigure-1.37.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-extension-autoconfigure-spi-1.37.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-extension-autoconfigure-spi-1.37.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-logs-1.37.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-logs-1.37.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-metrics-1.37.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-metrics-1.37.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-trace-1.37.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-sdk-trace-1.37.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-semconv-1.25.0-alpha-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/opentelemetry-semconv-1.25.0-alpha.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-api-4.20.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-api-4.20.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-chrome-driver-4.20.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-chrome-driver-4.20.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-chromium-driver-4.20.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-chromium-driver-4.20.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-devtools-v122-4.20.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-devtools-v122-4.20.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-devtools-v123-4.20.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-devtools-v123-4.20.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-devtools-v124-4.20.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-devtools-v124-4.20.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-devtools-v85-4.20.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-devtools-v85-4.20.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-edge-driver-4.20.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-edge-driver-4.20.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-firefox-driver-4.20.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-firefox-driver-4.20.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-http-4.20.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-http-4.20.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-ie-driver-4.20.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-ie-driver-4.20.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-java-4.20.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-java-4.20.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-json-4.20.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-json-4.20.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-manager-4.20.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-manager-4.20.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-os-4.20.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-os-4.20.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-remote-driver-4.20.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-remote-driver-4.20.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-safari-driver-4.20.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-safari-driver-4.20.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-support-4.20.0-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/selenium-support-4.20.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/AutomatedTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AutomatedTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/AutomatedTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SeleniumApsUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SeleniumApsUtil.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,37 +29,63 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 7
+}]]></component>
   <component name="ProjectId" id="2gQayTMDQswlK8RyGTlnzlRpGYU" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Coding/MackolikTesting/lib&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/beren/TheProject/Mackolik-Testing",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Coding\MackolikTesting\lib" />
     </key>
+  </component>
+  <component name="RunManager" selected="Application.AutomatedTest">
+    <configuration name="AutomatedTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="AutomatedTest" />
+      <module name="MackolikTesting" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SeleniumApsUtil" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="SeleniumApsUtil" />
+      <module name="MackolikTesting" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.AutomatedTest" />
+        <item itemvalue="Application.SeleniumApsUtil" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -159,6 +97,7 @@
       <updated>1715632511733</updated>
       <workItem from="1715632512933" duration="1286000" />
       <workItem from="1715633816495" duration="353000" />
+      <workItem from="1715634785306" duration="3056000" />
     </task>
     <servers />
   </component>

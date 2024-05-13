@@ -7,10 +7,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 public class AutomatedTest {
     protected static WebDriver driver;
-    protected static final String username = "seleniumtestuser@mailinator.com";
-    protected static final String password = "test98125!";
-
-    protected static final String baseURL = "zamaninda.com";
+    protected static final String baseURL = "https://www.mackolik.com/destek.aspx"; // Try the full URL
 
     protected static SeleniumApsUtil seleniumApsUtil;
 
@@ -20,17 +17,23 @@ public class AutomatedTest {
         options.addArguments("--whitelisted-ips=''");
         options.addArguments("--remote-allow-origins=*");
         driver = new ChromeDriver(options);
-        seleniumApsUtil = new SeleniumApsUtil(driver);
-        driver.get(String.format("https://%s/login", baseURL));
-        //important, otherwise elements might not be in the viewport, and you might get "element click intercepted" errors
+        seleniumApsUtil = new SeleniumApsUtil();
+        driver.get(String.format("%s", baseURL));
         driver.manage().window().maximize();
-        seleniumApsUtil.clearAndEnterText("email", username);
-        seleniumApsUtil.clearAndEnterText("password", password);
-        driver.findElement(By.id("loginButton")).click();
+
+        if (driver.getTitle().contains("Bize Ulaşın")) {
+            System.out.println("Page loaded successfully. Assuming link is working.");
+        } else {
+            System.out.println("Warning: Page title does not contain 'Bize Ulaşın'. Link might have issues.");
+        }
     }
 
     @AfterAll
     public static void tearDown() {
         driver.quit();
+    }
+
+    public static void main(String[] args) {
+        setUp();
     }
 }
