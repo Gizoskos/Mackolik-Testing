@@ -10,10 +10,9 @@ public class Main {
         SeleniumApsUtil sel = new SeleniumApsUtil(AutomatedTest.driver);
         // Test senaryosunu başlatmak için setUp() metodunu çağırın
 
-
         // Test senaryosunu çalıştırın
         try {
-            sel.goToStatisticsList();
+            //sel.goToStatisticsList();
             // Örnek bir test senaryos
         } catch (Exception e) {
             e.printStackTrace();

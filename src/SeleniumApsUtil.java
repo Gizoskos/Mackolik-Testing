@@ -8,6 +8,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.function.Function;
 
+import static org.junit.Assert.assertTrue;
+
 public class SeleniumApsUtil {
     final int SPINNER_WAIT_TIME_S = 10;
     final int JS_LOAD_TIME_MS = 500;
@@ -76,6 +78,7 @@ public class SeleniumApsUtil {
         driver.findElement(By.id("sidebar_item_locations")).click();
         driver.findElement(By.xpath("((//table[1]/tbody/tr)[1])//td[2]//a")).click();
     }
+
 
     public void goToWorkstationsList() {
         goToFirstLocationDetails();
