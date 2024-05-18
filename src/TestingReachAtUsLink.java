@@ -1,6 +1,3 @@
-import org.junit.Assert;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -13,4 +10,5 @@ public class TestingReachAtUsLink extends AutomatedTest {
         System.out.println("testing link");
         assertTrue(driver.getTitle().contains("user.mackolik.com"));
     }
+    //Mackolik.com - iddaa,canlı maç,iddaa sonuçları,sahadan,futbol @ Mackolik.com  olması gereken
 }
