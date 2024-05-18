@@ -13,7 +13,9 @@ public class Main {
 
         // Test senaryosunu çalıştırın
         try {
-            sel.goToStatisticsList();
+            //sel.goToStatisticsList();
+            testFilterGermanyStatistics testFilterGermanyStatistics=new testFilterGermanyStatistics();
+            testFilterGermanyStatistics.testFilterGermanyStatistics();
             // Örnek bir test senaryos
         } catch (Exception e) {
             e.printStackTrace();
