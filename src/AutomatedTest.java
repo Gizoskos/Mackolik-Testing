@@ -1,9 +1,7 @@
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -23,18 +21,10 @@ public class AutomatedTest {
         options.addArguments("--remote-allow-origins=*");
         driver = new ChromeDriver(options);
         seleniumApsUtil = new SeleniumApsUtil(driver);
-        try {
-            // Reklam geç butonuna tıkla (örneğin, id'si "skip-ad" olan bir öğe varsayalım)
-            WebElement skipAdButton = driver.findElement(By.id("percent"));
-            if(skipAdButton != null) {
-                skipAdButton.click();
-                System.out.println("Reklam geçildi.");
-            } else {
-                System.out.println("Reklam geç butonu bulunamadı.");
-            }
-        } catch (NoSuchElementException e) {
-            System.out.println("Reklam geç butonu bulunamadı.");
-        }
+        driver.get(String.format("https://%s/login", baseURL));
+        //important, otherwise elements might not be in the viewport, and you might get "element click intercepted" errors
+        driver.manage().window().maximize();
+        seleniumApsUtil.skipAd();
     }
 
     @AfterAll

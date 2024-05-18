@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f5a71fbd-81b7-445b-8630-78d3fab0a56d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/StatisticCountryControl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_14_05_2024_01_10_[Changes]/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_14_05_2024_01_10__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AutomatedTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/AutomatedTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SeleniumApsUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SeleniumApsUtil.java" afterDir="false" />
@@ -64,9 +66,16 @@
       <recent name="C:\Coding\MackolikTesting\lib" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.AutomatedTest">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="AutomatedTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="AutomatedTest" />
+      <module name="MackolikTesting" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="MackolikTesting" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -81,6 +90,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
         <item itemvalue="Application.AutomatedTest" />
         <item itemvalue="Application.SeleniumApsUtil" />
       </list>

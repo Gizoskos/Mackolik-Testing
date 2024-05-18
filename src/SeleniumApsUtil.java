@@ -62,12 +62,12 @@ public class SeleniumApsUtil {
         wait.until(reserveButtonExistent);
     }
     public void goToStatisticsDetails() {
-        driver.findElement(By.id("bottom-menu0")).click();
+        driver.findElement(By.xpath("//*[@id='menu-temp']/div[1]/a[1]")).click();
         driver.findElement(By.xpath("//*[@id=\"bottom-menu0\"]/a[5]")).click();
     }
     public void goToStatisticsList() {
         goToStatisticsDetails();
-        driver.findElement(By.linkText("İstatistikler")).click();
+        driver.findElement(By.xpath("//*[@id=\"bottom-menu0\"]/a[5]")).click();
         waitForJSLoad();
     }
 
@@ -118,7 +118,19 @@ public class SeleniumApsUtil {
         waitForJSLoad();
         return !failed;
     }
-
+    public void skipAd() {
+        try {
+            WebElement skipAdButton = driver.findElement(By.id("percent"));
+            if(skipAdButton != null && skipAdButton.isDisplayed()) {
+                skipAdButton.click();
+                System.out.println("Reklam geçildi.");
+            } else {
+                System.out.println("Reklam geç butonu bulunamadı veya görünür değil.");
+            }
+        } catch (NoSuchElementException e) {
+            System.out.println("Reklam geç butonu bulunamadı.");
+        }
+    }
     public void addMondayShiftToCurrentWorkstation() {
         addMondayShiftToCurrentWorkstation("", "");
     }
