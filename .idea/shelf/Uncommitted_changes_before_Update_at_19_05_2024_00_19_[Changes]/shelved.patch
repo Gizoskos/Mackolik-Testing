@@ -1,0 +1,90 @@
+Index: src/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import org.openqa.selenium.WebDriver;\r\n\r\nimport java.io.IOException;\r\n\r\npublic class Main {\r\n    public static void main(String[] args) {\r\n        // Test sınıfınızı oluşturun\r\n        AutomatedTest automatedTest = new AutomatedTest();\r\n        automatedTest.setUp();\r\n        SeleniumApsUtil sel = new SeleniumApsUtil(AutomatedTest.driver);\r\n        // Test senaryosunu başlatmak için setUp() metodunu çağırın\r\n        boolean test1Passed = true;\r\n\r\n        // Test senaryosunu çalıştırın\r\n        try {\r\n            //sel.goToStatisticsList();\r\n            testFilterGermanyStatistics testFilterGermanyStatistics = new testFilterGermanyStatistics();\r\n            testFilterGermanyStatistics.testFilterGermanyStatistics();\r\n        } catch (AssertionError e) {\r\n            test1Passed = false;\r\n            System.out.println(\"Test failed: \" + e.getMessage());\r\n        }\r\n        catch (Exception e) {\r\n            test1Passed = false;\r\n            e.printStackTrace();\r\n            // Örnek bir test senaryos\r\n        } finally {\r\n            // Test senaryosunu sonlandırmak için tearDown() metodunu çağırın\r\n            automatedTest.tearDown();\r\n        }\r\n        if (test1Passed) {\r\n            System.out.println(\"All tests passed successfully.\");\r\n        } else {\r\n            System.out.println(\"Some tests failed.\");\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Main.java b/src/Main.java
+--- a/src/Main.java	(revision 6c1c69e0cb5191fcf859ac1b345186f8ac52492f)
++++ b/src/Main.java	(date 1716067078494)
+@@ -10,18 +10,31 @@
+         SeleniumApsUtil sel = new SeleniumApsUtil(AutomatedTest.driver);
+         // Test senaryosunu başlatmak için setUp() metodunu çağırın
+         boolean test1Passed = true;
++        boolean test2Passed = true;
+ 
+         // Test senaryosunu çalıştırın
++
+         try {
+-            //sel.goToStatisticsList();
++        TestingReachAtUsLink testingReachAtUsLink = new TestingReachAtUsLink();
++        testingReachAtUsLink.testLink("user.mackolik.com/UserPages/destek.aspx");
++        } catch (AssertionError e) {
++            test1Passed = false;
++            System.out.println("Test failed: " + e.getMessage());
++        }
++        catch (Exception e) {
++            test1Passed = false;
++            e.printStackTrace();
++            // Örnek bir test senaryos
++        }
++        try{
+             testFilterGermanyStatistics testFilterGermanyStatistics = new testFilterGermanyStatistics();
+             testFilterGermanyStatistics.testFilterGermanyStatistics();
+         } catch (AssertionError e) {
+-            test1Passed = false;
++            test2Passed = false;
+             System.out.println("Test failed: " + e.getMessage());
+         }
+         catch (Exception e) {
+-            test1Passed = false;
++            test2Passed = false;
+             e.printStackTrace();
+             // Örnek bir test senaryos
+         } finally {
+@@ -29,9 +42,15 @@
+             automatedTest.tearDown();
+         }
+         if (test1Passed) {
+-            System.out.println("All tests passed successfully.");
++            System.out.println("test 1 passed successfully.");
+         } else {
+-            System.out.println("Some tests failed.");
++            System.out.println("test 1 tests failed.");
+         }
++        if (test2Passed) {
++            System.out.println("test 2 passed successfully.");
++        } else {
++            System.out.println("test 2 tests failed.");
++        }
++
+     }
+ }
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"f5a71fbd-81b7-445b-8630-78d3fab0a56d\" name=\"Changes\" comment=\"\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">\r\n    <option name=\"selectedUrlAndAccountId\">\r\n      <UrlAndAccount>\r\n        <option name=\"accountId\" value=\"b6d918ea-7966-40de-ada0-a0cd4f336fd3\" />\r\n        <option name=\"url\" value=\"https://github.com/Gizoskos/Mackolik-Testing.git\" />\r\n      </UrlAndAccount>\r\n    </option>\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 7\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2gQayTMDQswlK8RyGTlnzlRpGYU\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,\r\n    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,\r\n    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,\r\n    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,\r\n    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,\r\n    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;main&quot;,\r\n    &quot;last_opened_file_path&quot;: &quot;C:/Users/beren/TheProject/Mackolik-Testing&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,\r\n    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,\r\n    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,\r\n    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Coding\\MackolikTesting\\lib\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\" selected=\"Application.Main\">\r\n    <configuration name=\"AutomatedTest\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"AutomatedTest\" />\r\n      <module name=\"MackolikTesting\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"Main\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"Main\" />\r\n      <module name=\"MackolikTesting\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"SeleniumApsUtil\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"SeleniumApsUtil\" />\r\n      <module name=\"MackolikTesting\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Application.Main\" />\r\n        <item itemvalue=\"Application.AutomatedTest\" />\r\n        <item itemvalue=\"Application.SeleniumApsUtil\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"f5a71fbd-81b7-445b-8630-78d3fab0a56d\" name=\"Changes\" comment=\"\" />\r\n      <created>1715632511733</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1715632511733</updated>\r\n      <workItem from=\"1715632512933\" duration=\"1286000\" />\r\n      <workItem from=\"1715633816495\" duration=\"353000\" />\r\n      <workItem from=\"1715634785306\" duration=\"3056000\" />\r\n      <workItem from=\"1715942900323\" duration=\"59000\" />\r\n      <workItem from=\"1716057596843\" duration=\"7884000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 6c1c69e0cb5191fcf859ac1b345186f8ac52492f)
++++ b/.idea/workspace.xml	(date 1716067147479)
+@@ -6,6 +6,7 @@
+   <component name="ChangeListManager">
+     <list default="true" id="f5a71fbd-81b7-445b-8630-78d3fab0a56d" name="Changes" comment="">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -117,7 +118,7 @@
+       <workItem from="1715633816495" duration="353000" />
+       <workItem from="1715634785306" duration="3056000" />
+       <workItem from="1715942900323" duration="59000" />
+-      <workItem from="1716057596843" duration="7884000" />
++      <workItem from="1716057596843" duration="9543000" />
+     </task>
+     <servers />
+   </component>
