@@ -3,8 +3,12 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 
+import java.time.Duration;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
@@ -12,40 +16,36 @@ import static org.junit.Assert.assertTrue;
 public class testFilterGermanyStatistics extends AutomatedTest {
     static final String testWorkstationName = "testFilterGermanyStatisticsWorkstation";
     SeleniumApsUtil sel = new SeleniumApsUtil(AutomatedTest.driver);
+
     @Test
-    public void testFilterGermanyStatistics() {
+    public void testFilterGermanyStatistics() throws InterruptedException {
         sel.goToStatisticsDetails();
-    // Maçkolik istatistikler sayfasına git
-    //AutomatedTest.driver.get("https://arsiv.mackolik.com/Statistics/Default.aspx");
+        // Explicit wait tanımla
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-    // Futbol -> İstatistikler e tıkla
-    //WebElement futbolMenu = AutomatedTest.driver.findElement(By.xpath("//*[@id=\"menu-temp\"]/div[1]/a[1]"));
-    //futbolMenu.click();
-    //WebElement istatistiklerLink = AutomatedTest.driver.findElement(By.xpath("İstatistikler"));
-    //istatistiklerLink.click();
+        // Almanya ülkesini seç
+        WebElement countryDropdown = wait.until(ExpectedConditions.elementToBeClickable(By.id("cboCountry")));
+        Select selectCountry = new Select(countryDropdown);
+        selectCountry.selectByVisibleText("Almanya");
 
-    // Ülke filtresi açılır menüsünü bulun ve Almanya'yı seçin
-    WebElement countryDropdown = AutomatedTest.driver.findElement(By.xpath("//*[@id=\"cboCountry\"]"));
-    countryDropdown.click();
-    List<WebElement> options = driver.findElements(By.xpath("//*[@id='cboCountry']/option"));
-        // "Almanya" seçeneğini bulun ve tıklayın
-        for (WebElement option : options) {
-            if (option.getText().equals("Almanya")) {
-                option.click();
-                break;
-            }
+        // Listele butonuna tıkla
+        WebElement listButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("btnList")));
+        listButton.click();
+        Thread.sleep(2000);
+
+
+        // İstatistikler tablosunun yüklenmesini bekle
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='tblLeagues']/tbody/tr[2]")));
+        Thread.sleep(2000);
+        // İstatistikler tablosundaki tüm `tr` öğelerini bulun
+        List<WebElement> rows = driver.findElements(By.xpath("//*[@id='tblLeagues']/tbody/tr"));
+
+        // İlk satırı (başlık satırını) atla ve geri kalan satırları kontrol et
+        for (int i = 1; i < rows.size(); i++) {
+            WebElement row = rows.get(i);
+            String rowText = row.getText();
+            assertTrue("Satırda Almanya yazısı bulunmuyor: " + rowText, rowText.contains("Almanya"));
         }
-
-    // Filtrenin doğru şekilde uygulandığını kontrol et
-    WebElement filterButton = AutomatedTest.driver.findElement(By.id("btnList"));
-    filterButton.click();
-
-    // Filtrelenen liste öğelerini kontrol et
-    List<WebElement> countryElements = AutomatedTest.driver.findElements(By.xpath("//td[@class='countryColumn']"));
-
-    // Listedeki tüm öğelerin Almanya olduğunu kontrol et
-    for (WebElement element : countryElements) {
-        assertTrue("Liste öğesi Almanya değil: " + element.getText(), element.getText().contains("Almanya"));
     }
-}
 }
