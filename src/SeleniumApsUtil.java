@@ -46,6 +46,7 @@ public class SeleniumApsUtil {
         }
     }
 
+
     boolean elementExists(By by) {
         return elementExists(by, driver);
     }
@@ -74,11 +75,16 @@ public class SeleniumApsUtil {
     }
 
 
+
     public void goToFirstLocationDetails() {
         driver.findElement(By.id("sidebar_item_locations")).click();
         driver.findElement(By.xpath("((//table[1]/tbody/tr)[1])//td[2]//a")).click();
     }
 
+    public void goToNewSite()
+    {
+        driver.findElement(By.xpath("//*[@id=\"header\"]/div/div[1]/a")).click();
+    }
 
     public void goToWorkstationsList() {
         goToFirstLocationDetails();

@@ -25,6 +25,7 @@ public class AutomatedTest {
         //important, otherwise elements might not be in the viewport, and you might get "element click intercepted" errors
         driver.manage().window().maximize();
         seleniumApsUtil.skipAd();
+
     }
 
     @AfterAll
