@@ -64,3 +64,7 @@ JUnit/TestNG: Structured and ran test cases
 Maven: Managed dependencies and builds
 
 Git: Version control for collaboration
+Results
+
+Detailed test outputs, screenshots, and project explanations can be found in the presentation file:
+ProjectSlide.pptx (included in this repository)
