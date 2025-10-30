@@ -17,15 +17,6 @@ The goal is to ensure data accuracy and interface stability using **Selenium Web
 - **Maven** – Build and dependency management  
 - **Git** – Version control  
 
-## Project Structure
-Mackolik-Testing/
-├── src/
-│ ├── main/java/pages/ # Page Object classes
-│ └── test/java/tests/ # Selenium test classes
-├── pom.xml # Maven dependencies
-└── README.md
-
-
 ## Getting Started
 
 ### Prerequisites
